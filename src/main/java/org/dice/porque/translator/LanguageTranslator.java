@@ -1,4 +1,4 @@
-package org.dice.LanTran.Translator;
+package org.dice.porque.translator;
 public interface LanguageTranslator {
 
     public String tranlate(String query, String source, String target);

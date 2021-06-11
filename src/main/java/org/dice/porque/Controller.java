@@ -1,8 +1,8 @@
-package org.dice.LanTran;
+package org.dice.porque;
 
-import org.dice.LanTran.Model.QARequest;
-import org.dice.LanTran.Model.QAResponse;
-import org.dice.LanTran.Tebaqa.TebaqaConnector;
+import org.dice.porque.model.QARequest;
+import org.dice.porque.model.QAResponse;
+import org.dice.porque.tebaqa.TebaqaConnector;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

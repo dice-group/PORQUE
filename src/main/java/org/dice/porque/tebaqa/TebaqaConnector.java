@@ -1,4 +1,4 @@
-package org.dice.LanTran.Tebaqa;
+package org.dice.porque.tebaqa;
 
 import org.json.JSONException;
 import org.json.JSONObject;

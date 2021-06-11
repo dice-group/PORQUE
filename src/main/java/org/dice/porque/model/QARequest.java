@@ -1,4 +1,4 @@
-package org.dice.LanTran.Model;
+package org.dice.porque.model;
 
 import org.springframework.lang.NonNull;
 
