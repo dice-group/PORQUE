@@ -1,9 +1,9 @@
-package org.dice.porque.tebaqa;
+package org.dice.porque.translator;
 
 import org.dice.porque.constants.PORQUEConstant;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,21 +13,26 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Class to connect to TeBaQa system.
+ * Class to translate text using Libre Translator
  *
  * @author Sourabh Poddar
  */
-public class TebaqaConnector {
-    private static final String requestURL = PORQUEConstant.TEBAQA_URL;
+@Component
+public class LibreTranslate implements LanguageTranslator {
 
-    public Object getTebaqaResponse(String query, String lang) {
+    private static final String requestURL = PORQUEConstant.LIBRE_TRANSLATE_URL;
+
+    @Override
+    public String tranlate(String query, String source, String target) {
+
         BufferedReader reader;
         String line;
+        String result = null;
         StringBuilder responseContent = new StringBuilder();
-        String urlParameters = "query=" + query + "&lang=" + lang;
+        String urlParameters = "q=" + query + "&source=" + source + "&target=" + target;
         byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
         URL url;
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         try {
             url = new URL(requestURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -55,9 +60,17 @@ public class TebaqaConnector {
                 reader.close();
             }
             jsonObject = new JSONObject(responseContent.toString());
+            result = jsonObject.get("translatedText").toString();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return jsonObject;
+        return result;
+
+    }
+
+    @Override
+    public Object listSupportLang() {
+
+        return null;
     }
 }
