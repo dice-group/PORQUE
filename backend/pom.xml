@@ -9,9 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.dice</groupId>
-	<artifactId>LanTran</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>LanTran</name>
+	<artifactId>PORQUE</artifactId>
+	<version>1.0.0</version>
+	<name>PORQUE</name>
+	<packaging>war</packaging>
 	<description>Language Translator</description>
 	<properties>
 		<java.version>11</java.version>
