@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.dice</groupId>
 	<artifactId>PORQUE</artifactId>
-	<version>1.0.0</version>
+	<version>3.0.0</version>
 	<name>PORQUE</name>
 	<packaging>war</packaging>
 	<description>Language Translator</description>
@@ -37,9 +37,15 @@
             <version>0.0.20131108.vaadin1</version>
             <scope>compile</scope>
         </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
     </dependencies>
 
 	<build>
+		<finalName>${artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
