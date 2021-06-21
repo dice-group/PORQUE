@@ -27,7 +27,7 @@ jobs:
         run: echo Hello, world!
         
       - name: run pull command
-        run: cd /home/PORQUE && sudo mkdir test
+        run: cd /home/PORQUE && git pull
         
       - name: deploy new code 
         run: cd /home/PORQUE/dockerfiles && sudo bash ./deploy.sh
