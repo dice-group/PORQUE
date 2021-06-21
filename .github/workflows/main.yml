@@ -30,7 +30,7 @@ jobs:
         run: git status
         
       - name: deploy new code 
-        run: cd /home/PORQUE/dockerfiles && sudo bash ./deploy.sh
+        run: bash ./dockerfiles/deploy.sh
         
 
 
