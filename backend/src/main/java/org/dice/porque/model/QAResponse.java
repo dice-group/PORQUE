@@ -1,6 +1,6 @@
 package org.dice.porque.model;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Model class for PORQUE post response object
@@ -9,18 +9,52 @@ import java.util.List;
  */
 public class QAResponse {
 
-    private List<String> answer;
+    private Set<String> answers;
+    private String type;
+    private String sparqlQuery;
 
-    public QAResponse(List<String> answer) {
-        this.answer = answer;
+    /**
+     * @return the answers
+     */
+    public Set<String> getAnswers() {
+        return answers;
     }
 
-    public List<String> getAnswer() {
-        return answer;
+    /**
+     * @param answers the answers to set
+     */
+    public void setAnswers(Set<String> answers) {
+        this.answers = answers;
     }
 
-    public void setAnswer(List<String> answer) {
-        this.answer = answer;
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * @return the sparqlQuery
+     */
+    public String getSparqlQuery() {
+        return sparqlQuery;
+    }
+
+    /**
+     * @param sparqlQuery the sparqlQuery to set
+     */
+    public void setSparqlQuery(String sparqlQuery) {
+        this.sparqlQuery = sparqlQuery;
     }
 
 }
+
+

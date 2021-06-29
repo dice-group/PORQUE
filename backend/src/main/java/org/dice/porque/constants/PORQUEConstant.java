@@ -12,6 +12,6 @@ public interface PORQUEConstant {
 
     //API URL
     String LIBRE_TRANSLATE_URL = "https://translate.astian.org/translate";
-    String TEBAQA_URL = "https://tebaqa.demos.dice-research.org/qa-simple";
+    String TEBAQA_URL = "https://tebaqa.demos.dice-research.org/qa";
 
 }

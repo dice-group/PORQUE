@@ -1,4 +1,4 @@
-package org.dice.porque.tebaqa;
+package org.dice.porque.qasystems;
 
 import org.dice.porque.constants.PORQUEConstant;
 import org.json.JSONException;
@@ -17,10 +17,10 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Sourabh Poddar
  */
-public class TebaqaConnector {
+public class Tebaqa implements QASystems {
     private static final String requestURL = PORQUEConstant.TEBAQA_URL;
 
-    public Object getTebaqaResponse(String query, String lang) {
+    public Object getAnswer(String query, String lang) {
         BufferedReader reader;
         String line;
         StringBuilder responseContent = new StringBuilder();
