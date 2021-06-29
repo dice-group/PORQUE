@@ -10,14 +10,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Controller class to map PORQUE http request
@@ -45,12 +43,42 @@ public class Controller {
      *
      * @param qaRequest request body
      */
-    @PostMapping(path = "/QA", consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_FORM_URLENCODED_VALUE},
+    @PostMapping(path = "/QA", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
-    public QAResponse postmethod(@Valid @RequestBody QARequest qaRequest) {
+    public QAResponse postmethod(@Valid @ModelAttribute QARequest qaRequest) {
+        String query = qaRequest.getQuery();
+        if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
+            query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
+        }
+        Set<String> answer = new HashSet<>();
+        String type = null;
+        String sparqlQuery = null;
+        JSONObject tebaqaResponse = (JSONObject) new Tebaqa().getAnswer(query, PORQUEConstant.ENGLISH_LANG_CODE);
+        try {
+            JSONArray question = tebaqaResponse.getJSONArray("questions");
+            sparqlQuery = question.getJSONObject(0).getJSONObject("query").get("sparql").toString();
+            JSONArray bindings = new JSONObject(question.getJSONObject(0).getJSONObject("question").get("answers").toString()).getJSONObject("results").getJSONArray("bindings");
+            for (int i = 0; i < bindings.length(); i++) {
+                if (i == 0)
+                    type = bindings.getJSONObject(i).getJSONObject("x").get("type").toString();
+                answer.add(bindings.getJSONObject(i).getJSONObject("x").get("value").toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        QAResponse qaResponse = new QAResponse();
+        qaResponse.setAnswers(answer);
+        qaResponse.setType(type);
+        qaResponse.setSparqlQuery(sparqlQuery);
+        return qaResponse;
+    }
+
+    @PostMapping(path = "/QA", consumes = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public QAResponse postmethodJSON(@Valid @RequestBody QARequest qaRequest) {
         String query = qaRequest.getQuery();
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
