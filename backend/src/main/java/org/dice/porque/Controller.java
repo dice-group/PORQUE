@@ -10,10 +10,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,6 +57,9 @@ public class Controller {
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
         }
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(qaRequest.getQuery()).append("\n").append(qaRequest.getLang()).append("\n").append(query).append("\n");
+
         Set<String> answer = new HashSet<>();
         String type = null;
         String sparqlQuery = null;
@@ -67,6 +76,8 @@ public class Controller {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        stringBuffer.append(answer).append("\n").append(type).append("\n").append(sparqlQuery).append("\n");
+        writeLogtoFile(stringBuffer);
         QAResponse qaResponse = new QAResponse();
         qaResponse.setAnswers(answer);
         qaResponse.setType(type);
@@ -104,5 +115,18 @@ public class Controller {
         qaResponse.setType(type);
         qaResponse.setSparqlQuery(sparqlQuery);
         return qaResponse;
+    }
+    private void writeLogtoFile(StringBuffer stringBuffer) {
+        File file = new File(getClass().getClassLoader().getResource("").getPath() + "log.txt");
+        try {
+            if (!file.exists())
+                file.createNewFile();
+            FileWriter fw = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(stringBuffer.toString());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
