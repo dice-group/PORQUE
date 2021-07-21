@@ -1,9 +1,9 @@
 package org.dice.porque.qasystems;
 
 import org.dice.porque.constants.PORQUEConstant;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -59,5 +59,42 @@ public class Tebaqa implements QASystems {
             e.printStackTrace();
         }
         return jsonObject;
+    }
+
+    public String getQALDresponse(JSONObject tebaqaResponse, String query) {
+        String type = null;
+        String sparqlQuery;
+        JSONObject response = null;
+
+        try {
+            JSONArray questions = new JSONArray();
+            JSONArray question = tebaqaResponse.getJSONArray("questions");
+            sparqlQuery = question.getJSONObject(0).getJSONObject("query").get("sparql").toString();
+            JSONArray bindings = new JSONObject(question.getJSONObject(0).getJSONObject("question").get("answers").toString()).getJSONObject("results").getJSONArray("bindings");
+            JSONArray resultbindings = new JSONArray();
+            for (int i = 0; i < bindings.length(); i++) {
+                if (i == 0)
+                    type = bindings.getJSONObject(i).getJSONObject("x").get("type").toString();
+                String value = bindings.getJSONObject(i).getJSONObject("x").get("value").toString();
+                resultbindings.put(new JSONObject().put("uri", new JSONObject().put("type", type)
+                        .put("value", value)));
+            }
+            JSONObject qu = new JSONObject();
+            qu.put("id", 1);
+            qu.put("question", new JSONArray().put(new JSONObject().put("language", "en")
+                    .put("string", query)));
+            qu.put("query", new JSONObject().put("sparql", sparqlQuery));
+            qu.put("answers", new JSONArray().put(new JSONObject()
+                    .put("head", new JSONObject()
+                            .put("vars", new JSONArray().put("uri")))
+                    .put("results", new JSONObject()
+                            .put("bindings", resultbindings))));
+            questions.put(qu);
+            response = new JSONObject().put("questions", questions);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return response.toString();
     }
 }
