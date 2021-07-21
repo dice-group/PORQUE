@@ -9,52 +9,21 @@ import java.util.Set;
  */
 public class QAResponse {
 
-    private Set<String> answers;
-    private String type;
-    private String sparqlQuery;
+    private String QALDresponse;
 
     /**
-     * @return the answers
+     * @return the QALDResponse
      */
-    public Set<String> getAnswers() {
-        return answers;
+    public String getQALDresponse() {
+        return QALDresponse;
     }
 
     /**
-     * @param answers the answers to set
+     * @param QALDresponse QALD response
      */
-    public void setAnswers(Set<String> answers) {
-        this.answers = answers;
+    public void setQALDresponse(String QALDresponse) {
+        this.QALDresponse = QALDresponse;
     }
-
-    /**
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * @return the sparqlQuery
-     */
-    public String getSparqlQuery() {
-        return sparqlQuery;
-    }
-
-    /**
-     * @param sparqlQuery the sparqlQuery to set
-     */
-    public void setSparqlQuery(String sparqlQuery) {
-        this.sparqlQuery = sparqlQuery;
-    }
-
 }
 
 

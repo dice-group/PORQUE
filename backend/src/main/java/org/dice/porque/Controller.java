@@ -5,8 +5,6 @@ import org.dice.porque.model.QARequest;
 import org.dice.porque.model.QAResponse;
 import org.dice.porque.qasystems.Tebaqa;
 import org.dice.porque.translator.LibreTranslate;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,8 +18,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Controller class to map PORQUE http request
@@ -52,70 +48,36 @@ public class Controller {
     @PostMapping(path = "/QA", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
-    public QAResponse postmethod(@Valid @ModelAttribute QARequest qaRequest) {
+    public String postmethod(@Valid @ModelAttribute QARequest qaRequest) {
         String query = qaRequest.getQuery();
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
         }
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(qaRequest.getQuery()).append("\n").append(qaRequest.getLang()).append("\n").append(query).append("\n");
-
-        Set<String> answer = new HashSet<>();
         String type = null;
         String sparqlQuery = null;
         JSONObject tebaqaResponse = (JSONObject) new Tebaqa().getAnswer(query, PORQUEConstant.ENGLISH_LANG_CODE);
-        try {
-            JSONArray question = tebaqaResponse.getJSONArray("questions");
-            sparqlQuery = question.getJSONObject(0).getJSONObject("query").get("sparql").toString();
-            JSONArray bindings = new JSONObject(question.getJSONObject(0).getJSONObject("question").get("answers").toString()).getJSONObject("results").getJSONArray("bindings");
-            for (int i = 0; i < bindings.length(); i++) {
-                if (i == 0)
-                    type = bindings.getJSONObject(i).getJSONObject("x").get("type").toString();
-                answer.add(bindings.getJSONObject(i).getJSONObject("x").get("value").toString());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        stringBuffer.append(answer).append("\n").append(type).append("\n").append(sparqlQuery).append("\n");
-        writeLogtoFile(stringBuffer);
         QAResponse qaResponse = new QAResponse();
-        qaResponse.setAnswers(answer);
-        qaResponse.setType(type);
-        qaResponse.setSparqlQuery(sparqlQuery);
-        return qaResponse;
+        qaResponse.setQALDresponse(new Tebaqa().getQALDresponse(tebaqaResponse, query));
+        return qaResponse.getQALDresponse();
     }
 
     @PostMapping(path = "/QA", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
-    public QAResponse postmethodJSON(@Valid @RequestBody QARequest qaRequest) {
+    public String postmethodJSON(@Valid @RequestBody QARequest qaRequest) {
         String query = qaRequest.getQuery();
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
         }
-        Set<String> answer = new HashSet<>();
         String type = null;
         String sparqlQuery = null;
         JSONObject tebaqaResponse = (JSONObject) new Tebaqa().getAnswer(query, PORQUEConstant.ENGLISH_LANG_CODE);
-        try {
-            JSONArray question = tebaqaResponse.getJSONArray("questions");
-            sparqlQuery = question.getJSONObject(0).getJSONObject("query").get("sparql").toString();
-            JSONArray bindings = new JSONObject(question.getJSONObject(0).getJSONObject("question").get("answers").toString()).getJSONObject("results").getJSONArray("bindings");
-            for (int i = 0; i < bindings.length(); i++) {
-                if (i == 0)
-                    type = bindings.getJSONObject(i).getJSONObject("x").get("type").toString();
-                answer.add(bindings.getJSONObject(i).getJSONObject("x").get("value").toString());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         QAResponse qaResponse = new QAResponse();
-        qaResponse.setAnswers(answer);
-        qaResponse.setType(type);
-        qaResponse.setSparqlQuery(sparqlQuery);
-        return qaResponse;
+        qaResponse.setQALDresponse(new Tebaqa().getQALDresponse(tebaqaResponse, query));
+        return qaResponse.getQALDresponse();
     }
+
     private void writeLogtoFile(StringBuffer stringBuffer) {
         File file = new File(getClass().getClassLoader().getResource("").getPath() + "log.txt");
         try {
