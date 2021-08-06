@@ -1,7 +1,5 @@
 package org.dice.porque.model;
 
-import java.util.Set;
-
 /**
  * Model class for PORQUE post response object
  *
@@ -9,20 +7,20 @@ import java.util.Set;
  */
 public class QAResponse {
 
-    private String QALDresponse;
+    private String responseJSON;
 
     /**
      * @return the QALDResponse
      */
-    public String getQALDresponse() {
-        return QALDresponse;
+    public String getResponseJSON() {
+        return responseJSON;
     }
 
     /**
-     * @param QALDresponse QALD response
+     * @param responseJSON QALD response
      */
-    public void setQALDresponse(String QALDresponse) {
-        this.QALDresponse = QALDresponse;
+    public void setResponseJSON(String responseJSON) {
+        this.responseJSON = responseJSON;
     }
 }
 

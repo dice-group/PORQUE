@@ -20,7 +20,45 @@ import java.nio.charset.StandardCharsets;
 public class Tebaqa implements QASystems {
     private static final String requestURL = PORQUEConstant.TEBAQA_URL;
 
-    public Object getAnswer(String query, String lang) {
+    public String getQALDresponse(String query, String lang) {
+        JSONObject tebaqaResponse = (JSONObject) getAnswer(query,lang);
+        String type = null;
+        String sparqlQuery;
+        JSONObject response = null;
+
+        try {
+            JSONArray questions = new JSONArray();
+            JSONArray question = tebaqaResponse.getJSONArray("questions");
+            sparqlQuery = question.getJSONObject(0).getJSONObject("query").get("sparql").toString();
+            JSONArray bindings = new JSONObject(question.getJSONObject(0).getJSONObject("question").get("answers").toString()).getJSONObject("results").getJSONArray("bindings");
+            JSONArray resultbindings = new JSONArray();
+            for (int i = 0; i < bindings.length(); i++) {
+                if (i == 0)
+                    type = bindings.getJSONObject(i).getJSONObject("x").get("type").toString();
+                String value = bindings.getJSONObject(i).getJSONObject("x").get("value").toString();
+                resultbindings.put(new JSONObject().put("uri", new JSONObject().put("type", type)
+                        .put("value", value)));
+            }
+            JSONObject qu = new JSONObject();
+            qu.put("id", 1);
+            qu.put("question", new JSONArray().put(new JSONObject().put("language", "en")
+                    .put("string", query)));
+            qu.put("query", new JSONObject().put("sparql", sparqlQuery));
+            qu.put("answers", new JSONArray().put(new JSONObject()
+                    .put("head", new JSONObject()
+                            .put("vars", new JSONArray().put("uri")))
+                    .put("results", new JSONObject()
+                            .put("bindings", resultbindings))));
+            questions.put(qu);
+            response = new JSONObject().put("questions", questions);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return response.toString();
+    }
+
+    private Object getAnswer(String query, String lang) {
         BufferedReader reader;
         String line;
         StringBuilder responseContent = new StringBuilder();
@@ -59,42 +97,5 @@ public class Tebaqa implements QASystems {
             e.printStackTrace();
         }
         return jsonObject;
-    }
-
-    public String getQALDresponse(JSONObject tebaqaResponse, String query) {
-        String type = null;
-        String sparqlQuery;
-        JSONObject response = null;
-
-        try {
-            JSONArray questions = new JSONArray();
-            JSONArray question = tebaqaResponse.getJSONArray("questions");
-            sparqlQuery = question.getJSONObject(0).getJSONObject("query").get("sparql").toString();
-            JSONArray bindings = new JSONObject(question.getJSONObject(0).getJSONObject("question").get("answers").toString()).getJSONObject("results").getJSONArray("bindings");
-            JSONArray resultbindings = new JSONArray();
-            for (int i = 0; i < bindings.length(); i++) {
-                if (i == 0)
-                    type = bindings.getJSONObject(i).getJSONObject("x").get("type").toString();
-                String value = bindings.getJSONObject(i).getJSONObject("x").get("value").toString();
-                resultbindings.put(new JSONObject().put("uri", new JSONObject().put("type", type)
-                        .put("value", value)));
-            }
-            JSONObject qu = new JSONObject();
-            qu.put("id", 1);
-            qu.put("question", new JSONArray().put(new JSONObject().put("language", "en")
-                    .put("string", query)));
-            qu.put("query", new JSONObject().put("sparql", sparqlQuery));
-            qu.put("answers", new JSONArray().put(new JSONObject()
-                    .put("head", new JSONObject()
-                            .put("vars", new JSONArray().put("uri")))
-                    .put("results", new JSONObject()
-                            .put("bindings", resultbindings))));
-            questions.put(qu);
-            response = new JSONObject().put("questions", questions);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return response.toString();
     }
 }
