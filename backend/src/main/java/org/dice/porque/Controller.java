@@ -53,8 +53,6 @@ public class Controller {
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
         }
-        String type = null;
-        String sparqlQuery = null;
         JSONObject tebaqaResponse = (JSONObject) new Tebaqa().getAnswer(query, PORQUEConstant.ENGLISH_LANG_CODE);
         QAResponse qaResponse = new QAResponse();
         qaResponse.setQALDresponse(new Tebaqa().getQALDresponse(tebaqaResponse, query));
