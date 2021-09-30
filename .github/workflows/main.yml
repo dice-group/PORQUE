@@ -24,7 +24,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Helo, world!
+        run: echo Hello, world!
         
       - name: run pull command
         run: git pull
