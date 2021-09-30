@@ -1,0 +1,3 @@
+[submodule "external-qa/qanary/qanary-core"]
+	path = external-qa/qanary/qanary-core
+	url = https://github.com/dice-group/Qanary.git
