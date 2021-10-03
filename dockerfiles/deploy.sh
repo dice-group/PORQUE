@@ -15,6 +15,12 @@ function build_container() {
         fi
     fi
 }
+ cd ..
+ git submodule update --init
+ git submodule update --recursive --remote
+ 
+ cd dockerfiles/
+	 
 
  cd ../external-qa/qanary/qanary-core/qanary_pipeline-template/
  mvn clean install -Ddockerfile.skip=false -DskipTests
