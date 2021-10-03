@@ -16,6 +16,14 @@ function build_container() {
     fi
 }
 
+ cd ../external-qa/qanary/qanary-core/qanary_pipeline-template/
+ mvn clean install -Ddockerfile.skip=false -DskipTests
+
+ cd ../../qanary-components/qanary_component-NED-DBpedia-Spotlight/
+ mvn clean install -Ddockerfile.skip=false -DskipTests
+ 
+ cd ../../../../dockerfiles/
+ 
 build_container nginx .. -f nginx/Dockerfile
 build_container backend-server .. -f backend/Dockerfile
 

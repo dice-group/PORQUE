@@ -1,17 +1,36 @@
 version: "3"
 
 services:
+
   nginx:
     image: $REGISTRY/porque/nginx:$VERSION
     ports:
       - 80:80
     networks:
       - porque-net
+
   porque-backend:
     image: $REGISTRY/porque/backend-server:$VERSION
     networks:
       - porque-net
     ports:
       - 8080:8080
+
+  qanary-core:
+    image: qapipeline:2.4.0
+    networks:
+      - porque-net
+    ports:
+      - 8888:8080
+
+  qanary-com1:
+    image: qanary_component-ned-dbpedia-spotlight:2.2.0
+    networks:
+      - porque-net
+    ports:
+      - 8880:8080
+
+ 
+ 
 networks:
   porque-net:
