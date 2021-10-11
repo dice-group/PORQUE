@@ -28,6 +28,12 @@ function build_container() {
  cd ../../qanary-components/qanary_component-NED-DBpedia-Spotlight/
  mvn clean install -Ddockerfile.skip=false -DskipTests
  
+ cd ../qanary_component-REL-RelationLinker2/
+ mvn clean install -Ddockerfile.skip=false -DskipTests
+ 
+ cd ../qanary_component-QB-Sina/
+ mvn clean install -Ddockerfile.skip=false -DskipTests
+ 
  cd ../../../../dockerfiles/
  
 build_container nginx .. -f nginx/Dockerfile

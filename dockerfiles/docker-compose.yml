@@ -28,9 +28,20 @@ services:
     networks:
       - porque-net
     ports:
-      - 8880:8080
+      - 10008:10008
 
- 
- 
+  qanary-com2:
+    image: qanary_component-rel-relationlinker2:2.0.0
+    networks:
+      - porque-net
+    ports:
+      - 8881:8080
+
+  qanary-com3:
+    image: qb-sina:2.0.1
+    networks:
+      - porque-net
+    ports:
+      - 8882:8080 
 networks:
   porque-net:
