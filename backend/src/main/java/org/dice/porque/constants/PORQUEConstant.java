@@ -14,6 +14,9 @@ public interface PORQUEConstant {
     String LIBRE_TRANSLATE_URL = "https://translate.astian.org/translate";
     String TEBAQA_URL = "http://tebaqa.cs.upb.de:8080/qa-porque";
     String QANSWER_URL = "http://qanswer-core1.univ-st-etienne.fr/api/gerbil";
+    String QANARY_URL = "http://porque.cs.upb.de:8888/startquestionansweringwithtextquestion";
+    String QANARY_SPARQL_ENDPOINT = "http://admin:admin@porque.cs.upb.de:5820/qanary/query";
+    String DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql";
 
     //Knowledge Base
     String DBPEDIA_KB = "dbpedia";
