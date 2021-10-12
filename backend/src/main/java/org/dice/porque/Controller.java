@@ -4,6 +4,7 @@ import org.dice.porque.constants.PORQUEConstant;
 import org.dice.porque.model.QARequest;
 import org.dice.porque.model.QAResponse;
 import org.dice.porque.qasystems.QAnswer;
+import org.dice.porque.qasystems.QanaryQA;
 import org.dice.porque.qasystems.Tebaqa;
 import org.dice.porque.translator.LibreTranslate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class Controller {
     }
 
     /**
-     * Method to handle post request
+     * Method to handle post request for tebaqa QA system
      *
      * @param qaRequest request body
      */
@@ -60,7 +61,7 @@ public class Controller {
     }
 
     /**
-     * Method to handle post request
+     * Method to handle post request for qanswer QA system
      *
      * @param qaRequest request body
      */
@@ -77,6 +78,23 @@ public class Controller {
         return qaResponse.getResponseJSON();
     }
 
+    /**
+     * Method to handle post request for qanary QA system
+     *
+     * @param qaRequest request body
+     */
+    @PostMapping(path = "/qa-qanary", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public String postQanaryQA(@Valid @ModelAttribute QARequest qaRequest) {
+        String query = qaRequest.getQuery();
+        if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
+            query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
+        }
+        QAResponse qaResponse = new QAResponse();
+        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE));
+        return qaResponse.getResponseJSON();
+    }
     @PostMapping(path = "/QA", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
