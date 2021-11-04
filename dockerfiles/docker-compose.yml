@@ -43,5 +43,10 @@ services:
       - porque-net
     ports:
       - 8882:8080 
+
+  falcon:
+    image: falcon
+    ports:
+      - 5001:8281
 networks:
   porque-net:
