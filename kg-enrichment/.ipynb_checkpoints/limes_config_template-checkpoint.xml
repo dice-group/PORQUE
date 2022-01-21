@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE LIMES SYSTEM "limes.dtd">
+<LIMES>
+    <PREFIX>
+        <NAMESPACE>http://www.w3.org/2002/07/owl#</NAMESPACE>
+        <LABEL>owl</LABEL>
+    </PREFIX>
+
+    <PREFIX>
+        <NAMESPACE>http://dbpedia.org/ontology/</NAMESPACE>
+        <LABEL>dbo</LABEL>
+    </PREFIX>
+    
+    <PREFIX>
+        <NAMESPACE>http://www.w3.org/2000/01/rdf-schema#</NAMESPACE>
+        <LABEL>rdfs</LABEL>
+    </PREFIX>
+
+    <SOURCE>
+        <ID>en-dbpedia2016-10</ID>
+        <ENDPOINT>http://porque.cs.upb.de:8890/sparql</ENDPOINT>
+        <GRAPH>http://www.upb.de/en-dbp2016-10</GRAPH>
+        <VAR>?x</VAR>
+        <PAGESIZE>10000</PAGESIZE>
+    </SOURCE>
+    
+    <TARGET>
+        <ID>de-dbpedia2016-10</ID>
+        <ENDPOINT>http://porque.cs.upb.de:8890/sparql</ENDPOINT>
+        <GRAPH>http://www.upb.de/de-dbp2016-10</GRAPH>
+        <VAR>?y</VAR>
+        <PAGESIZE>10000</PAGESIZE>
+    </TARGET>
+    
+    <MLALGORITHM>
+        <NAME>wombat simple</NAME>
+        <TYPE>unsupervised</TYPE>
+        <PARAMETER> 
+            <NAME>max execution time in minutes</NAME>
+            <VALUE>60</VALUE>
+        </PARAMETER>
+    </MLALGORITHM>
+    
+    <ACCEPTANCE>
+        <THRESHOLD>0.9</THRESHOLD>
+        <FILE>predictions.nt</FILE>
+        <RELATION>owl:sameAs</RELATION>
+    </ACCEPTANCE>
+    
+    <REVIEW>
+        <THRESHOLD>0.5</THRESHOLD>
+        <FILE>predictions_rev.nt</FILE>
+        <RELATION>owl:sameAs</RELATION>
+    </REVIEW>
+    
+    <EXECUTION>
+        <REWRITER>default</REWRITER>
+        <PLANNER>default</PLANNER>
+        <ENGINE>default</ENGINE>
+        <OPTIMIZATION_TIME>1000</OPTIMIZATION_TIME>
+        <EXPECTED_SELECTIVITY>0.5</EXPECTED_SELECTIVITY>
+    </EXECUTION>
+    
+    <OUTPUT>TAB</OUTPUT>
+</LIMES>
