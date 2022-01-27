@@ -95,6 +95,23 @@ public class Controller {
         qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE));
         return qaResponse.getResponseJSON();
     }
+    /**
+     * Method to handle post request for qanary QA system
+     *
+     * @param qaRequest request body
+     */
+    @PostMapping(path = "/qa-qanary2", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public String postQanaryQA1(@Valid @ModelAttribute QARequest qaRequest) {
+        String query = qaRequest.getQuery();
+        if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
+            query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
+        }
+        QAResponse qaResponse = new QAResponse();
+        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,2));
+        return qaResponse.getResponseJSON();
+    }
     @PostMapping(path = "/QA", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,

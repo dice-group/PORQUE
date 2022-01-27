@@ -46,6 +46,23 @@ public class QanaryQA implements QASystems {
         return jsonObject.toString();
     }
 
+    public String getQALDresponse(String query, String lang, int pipeline) {
+
+        String qanaryResponseOutGraph = getResponseQanaryPipeline2(query);
+        List<String> sparqlQuery = getSparqlQuery(qanaryResponseOutGraph);
+        List<String> results = executeSparqlDBpedia(sparqlQuery);
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        for (String result : results)
+            jsonArray.put(result);
+        try {
+            jsonObject.put("results", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
     private List<String> executeSparqlDBpedia(List<String> sparqlQuery) {
         List<String> results = new ArrayList<>();
         for (String query : sparqlQuery) {
@@ -84,6 +101,31 @@ public class QanaryQA implements QASystems {
         String outGraph = "";
         String componentListJson = new String();
         componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-DBpediaSpotlight\",\"RelationLinker2\",\"SINA\"]}";
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost(qanaryUrl);
+        httppost.addHeader("Content-Type", "application/json");
+        try {
+            StringEntity entitytemp = new StringEntity(componentListJson);
+            httppost.setEntity(entitytemp);
+            CloseableHttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream instream = entity.getContent();
+                // String result = getStringFromInputStream(instream);
+                String responsetext = IOUtils.toString(instream, StandardCharsets.UTF_8.name());
+                JSONObject responseJson = new JSONObject(responsetext);
+                outGraph = (String) responseJson.get("outGraph");
+            }
+            // HttpEntity entity = response.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return outGraph;
+    }
+    public String getResponseQanaryPipeline2(String query) {
+        String outGraph = "";
+        String componentListJson = new String();
+        componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-Falcon\"]}";
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(qanaryUrl);
         httppost.addHeader("Content-Type", "application/json");
