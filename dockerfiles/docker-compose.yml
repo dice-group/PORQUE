@@ -44,6 +44,13 @@ services:
     ports:
       - 8882:8080 
 
+  qanary-com4:
+    image: qanary_component-ned-falcon:2.2.0
+    networks:
+      - porque-net
+    ports:
+      - 8883:10011
+
   falcon:
     image: falcon
     ports:
