@@ -34,6 +34,9 @@ function build_container() {
  cd ../qanary_component-QB-Sina/
  mvn clean install -Ddockerfile.skip=false -DskipTests
  
+ cd ../qanary_component-NED-Falcon/
+ mvn clean install -Ddockerfile.skip=false -DskipTests
+ 
  cd ../../../../dockerfiles/
  
 build_container nginx .. -f nginx/Dockerfile
