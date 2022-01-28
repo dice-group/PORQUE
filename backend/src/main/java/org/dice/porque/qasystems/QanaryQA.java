@@ -125,7 +125,7 @@ public class QanaryQA implements QASystems {
     public String getResponseQanaryPipeline2(String query) {
         String outGraph = "";
         String componentListJson = new String();
-        componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-Falcon\"]}";
+        componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-Falcon\",\"RelationLinker2\",\"SINA\"]}";
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(qanaryUrl);
         httppost.addHeader("Content-Type", "application/json");
