@@ -103,7 +103,7 @@ public class Controller {
     @PostMapping(path = "/qa-qanary2", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
-    public String postQanaryQA1(@Valid @ModelAttribute QARequest qaRequest) {
+    public String postQanaryQA2(@Valid @ModelAttribute QARequest qaRequest) {
         String query = qaRequest.getQuery();
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
