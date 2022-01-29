@@ -59,7 +59,7 @@ services:
       - 8883:10011
   
   qanary-com5:
-    image: qanary_component-ned-falcon-Enriched:2.2.0
+    image: qanary_component-ned-falcon-enriched:2.2.0
     networks:
       - porque-net
     ports:
