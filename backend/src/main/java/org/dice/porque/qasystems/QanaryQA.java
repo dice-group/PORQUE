@@ -48,7 +48,7 @@ public class QanaryQA implements QASystems {
 
     public String getQALDresponse(String query, String lang, int pipeline) {
 
-        String qanaryResponseOutGraph = getResponseQanaryPipeline2(query);
+        String qanaryResponseOutGraph = getResponseQanaryPipeline(query,pipeline);
         List<String> sparqlQuery = getSparqlQuery(qanaryResponseOutGraph);
         List<String> results = executeSparqlDBpedia(sparqlQuery);
         JSONObject jsonObject = new JSONObject();
@@ -122,10 +122,24 @@ public class QanaryQA implements QASystems {
         }
         return outGraph;
     }
-    public String getResponseQanaryPipeline2(String query) {
+    public String getResponseQanaryPipeline(String query,int pipeline) {
         String outGraph = "";
         String componentListJson = new String();
-        componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-Falcon\",\"RelationLinker2\",\"SINA\"]}";
+        switch (pipeline)
+        {
+            case 1:
+                componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-DBpediaSpotlight\",\"RelationLinker2\",\"SINA\"]}";
+                break;
+            case 2:
+                componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-Falcon\",\"RelationLinker2\",\"SINA\"]}";
+                break;
+            case 3:
+                componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-Falcon-Enriched\",\"RelationLinker3\",\"SINA\"]}";
+                break;
+
+        }
+
+
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(qanaryUrl);
         httppost.addHeader("Content-Type", "application/json");
