@@ -83,7 +83,7 @@ public class Controller {
      *
      * @param qaRequest request body
      */
-    @PostMapping(path = "/qa-qanary", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
+    @PostMapping(path = "/qa-qanary1", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public String postQanaryQA(@Valid @ModelAttribute QARequest qaRequest) {
@@ -92,7 +92,7 @@ public class Controller {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
         }
         QAResponse qaResponse = new QAResponse();
-        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE));
+        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,1));
         return qaResponse.getResponseJSON();
     }
     /**
@@ -110,6 +110,18 @@ public class Controller {
         }
         QAResponse qaResponse = new QAResponse();
         qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,2));
+        return qaResponse.getResponseJSON();
+    }
+    @PostMapping(path = "/qa-qanary3", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public String postQanaryQA3(@Valid @ModelAttribute QARequest qaRequest) {
+        String query = qaRequest.getQuery();
+        if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
+            query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
+        }
+        QAResponse qaResponse = new QAResponse();
+        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,3));
         return qaResponse.getResponseJSON();
     }
     @PostMapping(path = "/QA", consumes = {MediaType.APPLICATION_JSON_VALUE,
