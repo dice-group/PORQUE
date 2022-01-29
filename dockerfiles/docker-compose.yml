@@ -55,5 +55,10 @@ services:
     image: falcon
     ports:
       - 5001:8281
+
+  falconenriched:
+    image: falconenriched
+    ports:
+      - 5002:8281
 networks:
   porque-net:
