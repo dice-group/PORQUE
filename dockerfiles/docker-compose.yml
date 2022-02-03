@@ -74,6 +74,11 @@ services:
     image: falconenriched
     ports:
       - 5002:8281
+  
+  sqg:
+    image: sqg:1.0.0
+    ports:
+      - 5055:5010
 
 networks:
   porque-net:
