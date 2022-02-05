@@ -41,9 +41,8 @@ public class QanaryQA implements QASystems {
         List<QanaryResult> results = executeSparqlDBpedia(sparqlQuery);
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        for (QanaryResult qanaryResult : results) {
-            try {
-
+        try {
+            for (QanaryResult qanaryResult : results) {
                 JSONArray bindings = new JSONArray();
                 for (String resultstr : qanaryResult.result) {
                     bindings.put(
@@ -71,9 +70,10 @@ public class QanaryQA implements QASystems {
                                         "results", new JSONObject().put(
                                                 "bindings", bindings))));
                 jsonArray.put(question);
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+            jsonObject.put("questions", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         return jsonObject.toString();
