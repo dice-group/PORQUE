@@ -31,41 +31,59 @@ public class QanaryQA implements QASystems {
     @Override
     public String getQALDresponse(String query, String lang) {
 
-        String qanaryResponseOutGraph = getResponseQanaryPipeline1(query);
-        List<String> sparqlQuery = getSparqlQuery(qanaryResponseOutGraph);
-        List<String> results = executeSparqlDBpedia(sparqlQuery);
-        JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-        for (String result : results)
-            jsonArray.put(result);
-        try {
-            jsonObject.put("results", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObject.toString();
+        return null;
     }
 
     public String getQALDresponse(String query, String lang, int pipeline) {
 
-        String qanaryResponseOutGraph = getResponseQanaryPipeline(query,pipeline);
+        String qanaryResponseOutGraph = getResponseQanaryPipeline(query, pipeline);
         List<String> sparqlQuery = getSparqlQuery(qanaryResponseOutGraph);
-        List<String> results = executeSparqlDBpedia(sparqlQuery);
+        List<QanaryResult> results = executeSparqlDBpedia(sparqlQuery);
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        for (String result : results)
-            jsonArray.put(result);
-        try {
-            jsonObject.put("results", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        for (QanaryResult qanaryResult : results) {
+            try {
+
+                JSONArray bindings = new JSONArray();
+                for (String resultstr : qanaryResult.result) {
+                    bindings.put(
+                            new JSONObject().put(
+                                    "uri", new JSONObject().put(
+                                            "type", "uri").put(
+                                            "value", resultstr)
+                            )
+                    );
+                }
+
+                JSONObject question = new JSONObject();
+                question.put(
+                        "question", new JSONArray().put(
+                                new JSONObject().put(
+                                        "string", query).put(
+                                        "language", "en"))).put(
+                        "query", new JSONObject().put(
+                                "sparql", qanaryResult.query)).put(
+                        "answers", new JSONArray().put(
+                                new JSONObject().put(
+                                        "head", new JSONObject().put(
+                                                "vars", new JSONArray().put(
+                                                        "uri"))).put(
+                                        "results", new JSONObject().put(
+                                                "bindings", bindings))));
+                jsonArray.put(question);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+
         return jsonObject.toString();
     }
 
-    private List<String> executeSparqlDBpedia(List<String> sparqlQuery) {
-        List<String> results = new ArrayList<>();
+    private List<QanaryResult> executeSparqlDBpedia(List<String> sparqlQuery) {
+
+        List<QanaryResult> qanaryResults = new ArrayList<>();
         for (String query : sparqlQuery) {
+            ArrayList<String> results = new ArrayList<>();
             QueryExecution qExe = QueryExecutionFactory.sparqlService(dbpediaEndpoint, query);
             String queryToken = query.substring(query.indexOf("?") + 1, Math.min(query.indexOf(".", query.indexOf("?")), query.indexOf(" ", query.indexOf("?"))));
             ResultSet resultset = qExe.execSelect();
@@ -73,8 +91,9 @@ public class QanaryQA implements QASystems {
                 QuerySolution querySolution = resultset.next();
                 results.add(querySolution.get(queryToken).toString());
             }
+            qanaryResults.add(new QanaryResult(query, results));
         }
-        return results;
+        return qanaryResults;
     }
 
     private List<String> getSparqlQuery(String qanaryResponseOutGraph) {
@@ -122,11 +141,11 @@ public class QanaryQA implements QASystems {
         }
         return outGraph;
     }
-    public String getResponseQanaryPipeline(String query,int pipeline) {
+
+    public String getResponseQanaryPipeline(String query, int pipeline) {
         String outGraph = "";
         String componentListJson = new String();
-        switch (pipeline)
-        {
+        switch (pipeline) {
             case 1:
                 componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-DBpediaSpotlight\",\"RelationLinker2\",\"SINA\"]}";
                 break;
@@ -167,4 +186,19 @@ public class QanaryQA implements QASystems {
         }
         return outGraph;
     }
+
+    protected class QanaryResult {
+        public String query;
+        public ArrayList<String> result;
+
+        QanaryResult(String query) {
+            this.query = query;
+        }
+
+        QanaryResult(String query, ArrayList<String> result) {
+            this.query = query;
+            this.result = result;
+        }
+    }
+
 }
