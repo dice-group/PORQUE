@@ -136,6 +136,12 @@ public class QanaryQA implements QASystems {
             case 3:
                 componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-Falcon-Enriched\",\"RelationLinker3\",\"SINA\"]}";
                 break;
+            case 4:
+                componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-Falcon\",\"RelationLinker2\",\"QB-SQG\"]}";
+                break;
+            case 5:
+                componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-Falcon-Enriched\",\"RelationLinker3\",\"QB-SQG\"]}";
+                break;
 
         }
 
