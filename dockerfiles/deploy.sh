@@ -40,7 +40,10 @@ function build_container() {
  cd ../qanary_component-NED-Falcon-Enriched/
  mvn clean install -Ddockerfile.skip=false -DskipTests
  
-  cd ../qanary_component-REL-RelationLinker3/
+ cd ../qanary_component-REL-RelationLinker3/
+ mvn clean install -Ddockerfile.skip=false -DskipTests
+ 
+ cd ../qanary_component-QB-SQG/
  mvn clean install -Ddockerfile.skip=false -DskipTests
  
  cd ../../../../dockerfiles/
