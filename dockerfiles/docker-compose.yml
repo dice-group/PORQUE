@@ -37,13 +37,6 @@ services:
     ports:
       - 8881:8080
 
-  qanary-com6:
-    image: qanary_component-rel-relationlinker3:2.0.0
-    networks:
-      - porque-net
-    ports:
-      - 8885:8080
-
   qanary-com3:
     image: qb-sina:2.0.1
     networks:
@@ -64,6 +57,20 @@ services:
       - porque-net
     ports:
       - 8884:10012
+
+  qanary-com6:
+    image: qanary_component-rel-relationlinker3:2.0.0
+    networks:
+      - porque-net
+    ports:
+      - 8885:8080
+
+  qanary-com7:
+    image: qanary_component-qb-sqg:2.0.1
+    networks:
+      - porque-net
+    ports:
+      - 8887:8080
 
   falcon:
     image: falcon
