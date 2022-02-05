@@ -38,7 +38,7 @@ public class QanaryQA implements QASystems {
 
         String qanaryResponseOutGraph = getResponseQanaryPipeline(query, pipeline);
         List<String> sparqlQuery = getSparqlQuery(qanaryResponseOutGraph);
-        List<QanaryResult> results = executeSparqlDBpedia(sparqlQuery);
+        List<QanaryResult> results = executeSparqlDBpedia(sparqlQuery,pipeline);
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
@@ -79,12 +79,25 @@ public class QanaryQA implements QASystems {
         return jsonObject.toString();
     }
 
-    private List<QanaryResult> executeSparqlDBpedia(List<String> sparqlQuery) {
+    private List<QanaryResult> executeSparqlDBpedia(List<String> sparqlQuery, int pipeline) {
+
+        String defaultGraph = "";
+        switch (pipeline){
+            case 2 :
+            case 4 :
+                defaultGraph = "http://www.upb.de/en-dbp2016-10";
+                break;
+            case 3 :
+            case 5 :
+                defaultGraph = "http://www.upb.de/en-dbp2016-10-enriched";
+                break;
+        }
 
         List<QanaryResult> qanaryResults = new ArrayList<>();
         for (String query : sparqlQuery) {
             ArrayList<String> results = new ArrayList<>();
-            QueryExecution qExe = QueryExecutionFactory.sparqlService(dbpediaEndpoint, query);
+            QueryExecution qExe = QueryExecutionFactory.sparqlService(dbpediaEndpoint, query, defaultGraph);
+
             String queryToken = query.substring(query.indexOf("?") + 1, Math.min(query.indexOf(".", query.indexOf("?")), query.indexOf(" ", query.indexOf("?"))));
             ResultSet resultset = qExe.execSelect();
             while (resultset.hasNext()) {
@@ -114,32 +127,6 @@ public class QanaryQA implements QASystems {
             spaqlQueries.add(querySolution.get("resultAsSparqlQuery").toString());
         }
         return spaqlQueries;
-    }
-
-    public String getResponseQanaryPipeline1(String query) {
-        String outGraph = "";
-        String componentListJson = new String();
-        componentListJson = "{ \"question\": \"" + query + "\", \"componentlist\":[\"NED-DBpediaSpotlight\",\"RelationLinker2\",\"SINA\"]}";
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpPost httppost = new HttpPost(qanaryUrl);
-        httppost.addHeader("Content-Type", "application/json");
-        try {
-            StringEntity entitytemp = new StringEntity(componentListJson);
-            httppost.setEntity(entitytemp);
-            CloseableHttpResponse response = httpclient.execute(httppost);
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                InputStream instream = entity.getContent();
-                // String result = getStringFromInputStream(instream);
-                String responsetext = IOUtils.toString(instream, StandardCharsets.UTF_8.name());
-                JSONObject responseJson = new JSONObject(responsetext);
-                outGraph = (String) responseJson.get("outGraph");
-            }
-            // HttpEntity entity = response.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return outGraph;
     }
 
     public String getResponseQanaryPipeline(String query, int pipeline) {
