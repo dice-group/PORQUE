@@ -26,7 +26,7 @@ public class QanaryQA implements QASystems {
 
     private final String qanaryUrl = PORQUEConstant.QANARY_URL;
     private final String sparqlEndpoint = PORQUEConstant.QANARY_SPARQL_ENDPOINT;
-    private final String dbpediaEndpoint = PORQUEConstant.DBPEDIA_SPARQL_ENDPOINT;
+    private final String dbpediaEndpoint = PORQUEConstant.DBPEDIA_SPARL_LOCAL_ENDPOINT;
 
     @Override
     public String getQALDresponse(String query, String lang) {
