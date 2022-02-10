@@ -36,16 +36,16 @@ public class QanaryQA implements QASystems {
 
     public String getQALDresponse(String query, String lang, int pipeline) {
 
+        JSONObject jsonObject = new JSONObject();
+        try {
         String qanaryResponseOutGraph = getResponseQanaryPipeline(query, pipeline);
         List<String> sparqlQuery = getSparqlQuery(qanaryResponseOutGraph);
-        System.out.println(sparqlQuery.get(0));
         List<QanaryResult> results = executeSparqlDBpedia(sparqlQuery,pipeline);
-        System.out.println(results.get(0));
-        JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
+        if(results.size()!=0)
+        {
+            System.out.println(results.get(0));
 
-
-        try {
+            JSONArray jsonArray = new JSONArray();
             for (QanaryResult qanaryResult : results) {
                 JSONArray bindings = new JSONArray();
                 for (String resultstr : qanaryResult.result) {
@@ -76,6 +76,8 @@ public class QanaryQA implements QASystems {
                 jsonArray.put(question);
             }
             jsonObject.put("questions", jsonArray);
+        }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -98,17 +100,22 @@ public class QanaryQA implements QASystems {
         }
 
         List<QanaryResult> qanaryResults = new ArrayList<>();
-        for (String query : sparqlQuery) {
-            ArrayList<String> results = new ArrayList<>();
-            QueryExecution qExe = QueryExecutionFactory.sparqlService(dbpediaEndpoint, query, defaultGraph);
+        try {
+            for (String query : sparqlQuery) {
+                ArrayList<String> results = new ArrayList<>();
+                QueryExecution qExe = QueryExecutionFactory.sparqlService(dbpediaEndpoint, query, defaultGraph);
 
-            String queryToken = query.substring(query.indexOf("?") + 1, Math.min(query.indexOf(".", query.indexOf("?")), query.indexOf(" ", query.indexOf("?"))));
-            ResultSet resultset = qExe.execSelect();
-            while (resultset.hasNext()) {
-                QuerySolution querySolution = resultset.next();
-                results.add(querySolution.get(queryToken).toString());
+                String queryToken = query.substring(query.indexOf("?") + 1, Math.min(query.indexOf(".", query.indexOf("?")), query.indexOf(" ", query.indexOf("?"))));
+                ResultSet resultset = qExe.execSelect();
+                while (resultset.hasNext()) {
+                    QuerySolution querySolution = resultset.next();
+                    results.add(querySolution.get(queryToken).toString());
+                }
+                qanaryResults.add(new QanaryResult(query, results));
             }
-            qanaryResults.add(new QanaryResult(query, results));
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
         return qanaryResults;
     }
