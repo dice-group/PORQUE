@@ -40,6 +40,8 @@ public class QanaryQA implements QASystems {
         try {
         String qanaryResponseOutGraph = getResponseQanaryPipeline(query, pipeline);
         List<String> sparqlQuery = getSparqlQuery(qanaryResponseOutGraph);
+        if(sparqlQuery.size()!=0)
+            System.out.println(sparqlQuery.get(0));
         List<QanaryResult> results = executeSparqlDBpedia(sparqlQuery,pipeline);
         if(results.size()!=0)
         {
