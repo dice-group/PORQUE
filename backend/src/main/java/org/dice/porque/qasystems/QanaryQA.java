@@ -39,6 +39,7 @@ public class QanaryQA implements QASystems {
         JSONObject jsonObject = new JSONObject();
         try {
         String qanaryResponseOutGraph = getResponseQanaryPipeline(query, pipeline);
+        System.out.println(qanaryResponseOutGraph);
         List<String> sparqlQuery = getSparqlQuery(qanaryResponseOutGraph);
         if(sparqlQuery.size()!=0)
             System.out.println(sparqlQuery.get(0));
