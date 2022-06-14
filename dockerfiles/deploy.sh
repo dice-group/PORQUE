@@ -19,6 +19,9 @@ function build_container() {
  git submodule update --init
  git submodule update --recursive --remote
  
+ # Starting Stardog server
+ bash $STARDOG_HOME/stardog-admin server start
+ 
  cd dockerfiles/
 	 
 
