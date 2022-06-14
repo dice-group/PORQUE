@@ -26,7 +26,7 @@ public class QanaryQA implements QASystems {
 
     private final String qanaryUrl = PORQUEConstant.QANARY_URL;
     private final String sparqlEndpoint = PORQUEConstant.QANARY_SPARQL_ENDPOINT;
-    private final String dbpediaEndpoint = PORQUEConstant.DBPEDIA_SPARL_LOCAL_ENDPOINT;
+    private final String dbpediaEndpoint = PORQUEConstant.DBPEDIA_SPARQL_LOCAL_ENDPOINT;
 
     @Override
     public String getQALDresponse(String query, String lang) {
@@ -88,7 +88,7 @@ public class QanaryQA implements QASystems {
     }
 
     private List<QanaryResult> executeSparqlDBpedia(List<String> sparqlQuery, int pipeline) {
-
+    	String sparqlEndpoint = dbpediaEndpoint;
         String defaultGraph = "";
         switch (pipeline) {
             case 2:
@@ -98,6 +98,7 @@ public class QanaryQA implements QASystems {
             case 3:
             case 5:
                 defaultGraph = "http://www.upb.de/en-dbp2016-10-enriched";
+                sparqlEndpoint = PORQUEConstant.DBPEDIA_SPARQL_ENR_LOCAL_ENDPOINT;
                 break;
         }
 
@@ -105,7 +106,7 @@ public class QanaryQA implements QASystems {
 
         for (String query : sparqlQuery) {
             ArrayList<String> results = new ArrayList<>();
-            QueryExecution qExe = QueryExecutionFactory.sparqlService(dbpediaEndpoint, query, defaultGraph);
+            QueryExecution qExe = QueryExecutionFactory.sparqlService(sparqlEndpoint, query, defaultGraph);
             try {
 
                 String queryToken = query.substring(query.indexOf("?") + 1, Math.min(query.indexOf(".", query.indexOf("?")), query.indexOf(" ", query.indexOf("?"))));
