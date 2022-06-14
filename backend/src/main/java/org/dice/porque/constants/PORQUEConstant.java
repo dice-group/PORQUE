@@ -18,7 +18,7 @@ public interface PORQUEConstant {
     String QANARY_SPARQL_ENDPOINT = "http://admin:admin@porque.cs.upb.de:5820/qanary/query";
     String DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql";
     String DBPEDIA_SPARQL_LOCAL_ENDPOINT = "http://porque.cs.upb.de:8830/sparql";
-    String DBPEDIA_SPARQL_ENR_LOCAL_ENDPOINT = "http://porque.cs.upb.de:8830/sparql";
+    String DBPEDIA_SPARQL_ENR_LOCAL_ENDPOINT = "http://porque.cs.upb.de:8820/sparql";
 
     //Knowledge Base
     String DBPEDIA_KB = "dbpedia";
