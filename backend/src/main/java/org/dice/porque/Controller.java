@@ -1,5 +1,12 @@
 package org.dice.porque;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.validation.Valid;
+
 import org.dice.porque.constants.PORQUEConstant;
 import org.dice.porque.model.QARequest;
 import org.dice.porque.model.QAResponse;
@@ -7,19 +14,15 @@ import org.dice.porque.qasystems.QAnswer;
 import org.dice.porque.qasystems.QanaryQA;
 import org.dice.porque.qasystems.Tebaqa;
 import org.dice.porque.translator.LibreTranslate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.validation.Valid;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller class to map PORQUE http request
@@ -28,6 +31,10 @@ import java.io.IOException;
  */
 @RestController
 public class Controller {
+	
+	Logger logger = LoggerFactory.getLogger(Controller.class);
+	
+	private static int counter = 0;
 
     @Autowired
     private LibreTranslate libreTranslate;
@@ -52,11 +59,17 @@ public class Controller {
                     MediaType.APPLICATION_XML_VALUE})
     public String postmethod(@Valid @ModelAttribute QARequest qaRequest) {
         String query = qaRequest.getQuery();
+        // Fetch counter value
+    	int countId = requestCounter();
+    	// Log incoming query
+    	logger.info(countId+"\tReceived request for the question: "+ query);
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
         }
         QAResponse qaResponse = new QAResponse();
         qaResponse.setResponseJSON(new Tebaqa().getQALDresponse(query, PORQUEConstant.ENGLISH_LANG_CODE));
+        // Log outgoing response
+        logger.info(countId+"\tSending response: "+qaResponse.getResponseJSON());
         return qaResponse.getResponseJSON();
     }
 
@@ -70,11 +83,17 @@ public class Controller {
                     MediaType.APPLICATION_XML_VALUE})
     public String postQAnswer(@Valid @ModelAttribute QARequest qaRequest) {
         String query = qaRequest.getQuery();
+        // Fetch counter value
+    	int countId = requestCounter();
+    	// Log incoming query
+    	logger.info(countId+"\tReceived request for the question: "+ query);
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
         }
         QAResponse qaResponse = new QAResponse();
         qaResponse.setResponseJSON(new QAnswer().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE));
+        // Log outgoing response
+        logger.info(countId+"\tSending response: "+qaResponse.getResponseJSON());
         return qaResponse.getResponseJSON();
     }
 
@@ -87,13 +106,7 @@ public class Controller {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public String postQanaryQA(@Valid @ModelAttribute QARequest qaRequest) {
-        String query = qaRequest.getQuery();
-        if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
-            query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
-        }
-        QAResponse qaResponse = new QAResponse();
-        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,1));
-        return qaResponse.getResponseJSON();
+    	return processQanaryRequest(qaRequest, 1);
     }
     /**
      * Method to handle post request for qanary QA system
@@ -104,50 +117,44 @@ public class Controller {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public String postQanaryQA2(@Valid @ModelAttribute QARequest qaRequest) {
-        String query = qaRequest.getQuery();
-        if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
-            query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
-        }
-        QAResponse qaResponse = new QAResponse();
-        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,2));
-        return qaResponse.getResponseJSON();
+    	return processQanaryRequest(qaRequest, 2);
     }
     @PostMapping(path = "/qa-qanary3", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public String postQanaryQA3(@Valid @ModelAttribute QARequest qaRequest) {
-        String query = qaRequest.getQuery();
-        if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
-            query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
-        }
-        QAResponse qaResponse = new QAResponse();
-        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,3));
-        return qaResponse.getResponseJSON();
+    	return processQanaryRequest(qaRequest, 3);
     }
 
     @PostMapping(path = "/qa-qanary4", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public String postQanaryQA4(@Valid @ModelAttribute QARequest qaRequest) {
-        String query = qaRequest.getQuery();
-        if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
-            query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
-        }
-        QAResponse qaResponse = new QAResponse();
-        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,4));
-        return qaResponse.getResponseJSON();
+    	return processQanaryRequest(qaRequest, 4);
     }
 
     @PostMapping(path = "/qa-qanary5", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     public String postQanaryQA5(@Valid @ModelAttribute QARequest qaRequest) {
-        String query = qaRequest.getQuery();
+        return processQanaryRequest(qaRequest, 5);
+    }
+    
+    
+    private String processQanaryRequest(QARequest qaRequest, int pipelineCode) {
+    	String query = qaRequest.getQuery();
+    	// Fetch counter value
+    	int countId = requestCounter();
+    	// Log incoming query
+    	logger.info(countId+"\tReceived request for the question: "+ query);
+    	
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
         }
         QAResponse qaResponse = new QAResponse();
-        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,5));
+        qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,pipelineCode));
+        // Log outgoing response
+        logger.info(countId+"\tSending response: "+qaResponse.getResponseJSON());
         return qaResponse.getResponseJSON();
     }
 
@@ -157,11 +164,17 @@ public class Controller {
                     MediaType.APPLICATION_XML_VALUE})
     public String postmethodJSON(@Valid @RequestBody QARequest qaRequest) {
         String query = qaRequest.getQuery();
+        // Fetch counter value
+    	int countId = requestCounter();
+    	// Log incoming query
+    	logger.info(countId+"\tReceived request for the question: "+ query);
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
         }
         QAResponse qaResponse = new QAResponse();
         qaResponse.setResponseJSON(new Tebaqa().getQALDresponse(query, PORQUEConstant.ENGLISH_LANG_CODE));
+        // Log outgoing response
+        logger.info(countId+"\tSending response: "+qaResponse.getResponseJSON());
         return qaResponse.getResponseJSON();
     }
 
@@ -177,5 +190,9 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    private static int requestCounter() {
+    	return ++counter;
     }
 }
