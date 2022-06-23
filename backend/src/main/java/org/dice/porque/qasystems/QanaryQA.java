@@ -112,6 +112,9 @@ public class QanaryQA implements QASystems {
         List<QanaryResult> qanaryResults = new ArrayList<>();
 
         for (String query : sparqlQuery) {
+        	if(query.trim().isEmpty()) {
+        		continue;
+        	}
             ArrayList<String> results = new ArrayList<>();
             QueryExecution qExe = QueryExecutionFactory.sparqlService(sparqlEndpoint, query, defaultGraph);
             try {
