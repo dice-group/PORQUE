@@ -22,5 +22,8 @@ public interface PORQUEConstant {
 
     //Knowledge Base
     String DBPEDIA_KB = "dbpedia";
+    
+    // Default response
+    String DEF_RESPONSE = "{ \"questions\": [{\"question\": [{\"string\": \"%s\",\"language\": \"%s\"}],\"query\": {},\"answers\": []}]}";
 
 }

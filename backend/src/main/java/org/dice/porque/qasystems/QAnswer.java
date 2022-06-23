@@ -51,6 +51,11 @@ public class QAnswer implements QASystems{
                 reader.close();
             }
             jsonObject = new JSONObject(responseContent.toString());
+            // check if jsonObject is empty
+            if (jsonObject == null || jsonObject.isNull("questions")) {
+            	// set default json
+            	jsonObject = new JSONObject(String.format(PORQUEConstant.DEF_RESPONSE, query, lang));
+            }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
