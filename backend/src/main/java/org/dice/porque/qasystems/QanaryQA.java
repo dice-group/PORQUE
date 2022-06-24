@@ -110,8 +110,9 @@ public class QanaryQA implements QASystems {
         }
 
         List<QanaryResult> qanaryResults = new ArrayList<>();
-
-        for (String query : sparqlQuery) {
+        
+        for (int i=0; i < sparqlQuery.size(); i++) {
+        	String query = sparqlQuery.get(i);
         	if(query.trim().isEmpty()) {
         		continue;
         	}
@@ -127,7 +128,10 @@ public class QanaryQA implements QASystems {
                 }
                 qanaryResults.add(new QanaryResult(query, results));
             } catch (Exception e) {
-                e.printStackTrace();
+            	// In case of exception remove this query
+            	e.printStackTrace();
+            	logger.warn("Query failed: "+sparqlQuery.get(i));
+            	sparqlQuery.set(i, "");
             } finally {
                 qExe.close();
             }
