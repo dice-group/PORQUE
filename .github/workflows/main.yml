@@ -4,7 +4,7 @@ name: CI
 # Providing .bashrc environment
 defaults:
   run:
-    shell: bash -leo pipefail {0}
+    shell: bash -ileo pipefail {0}
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -25,23 +25,17 @@ jobs:
         
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
+      
+      # Pull changes from remote
+      - name: run pull command
+        run: git pull
+        
       # Stop all running services
       - name: stop running services
         run: bash ./dockerfiles/stop_services.sh
-        
-      - name: run pull command
-        run: git pull
         
       - name: deploy new code
         run: bash ./dockerfiles/deploy.sh
         
       - name: clear old docker images
         run: docker images --quiet --filter=dangling=true | xargs --no-run-if-empty docker rmi
-        
-
-
-      # Runs a set of commands using the runners shell
-      
-        
-          
