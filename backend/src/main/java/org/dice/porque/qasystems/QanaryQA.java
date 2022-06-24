@@ -99,10 +99,16 @@ public class QanaryQA implements QASystems {
             	questionJson.getJSONArray("answers").put(answerJson);
             	questionsArr.put(questionJson);
             }
+            
 
         } catch (JSONException | IOException e) {
         	logger.debug("Error occured, stopping further processing of this question.");
             e.printStackTrace();
+        } finally {
+        	// Checking for default response
+        	if(questionsArr.length() == 0) {
+        		return String.format(PORQUEConstant.DEF_RESPONSE, query, lang);
+        	}
         }
 
         return respJson.toString();
