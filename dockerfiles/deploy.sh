@@ -38,9 +38,8 @@ mvn clean install -Ddockerfile.skip=false -DskipTests
 
 cd ../../../../dockerfiles/
  
-cd nginx/
-docker build -t porque-nginx .
-cd ../backend
-docker build -t porque-backend .
 cd ..
+docker build -t porque-nginx -f dockerfiles/nginx/Dockerfile .
+docker build -t porque-backend -f dockerfiles/backend/Dockerfile .
+
 docker stack deploy --compose-file docker-compose.yml porque-stack
