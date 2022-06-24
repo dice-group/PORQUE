@@ -15,6 +15,8 @@ services:
       - porque-net
     ports:
       - 8080:8080
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
   qanary-core:
     image: qapipeline:2.4.0
@@ -22,6 +24,8 @@ services:
       - porque-net
     ports:
       - 8888:8080
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
   qanary-com1:
     image: qanary_component-ned-dbpedia-spotlight:2.2.0
@@ -29,6 +33,8 @@ services:
       - porque-net
     ports:
       - 10008:10008
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
   qanary-com2:
     image: qanary_component-rel-relationlinker2:2.0.0
@@ -36,6 +42,8 @@ services:
       - porque-net
     ports:
       - 8881:8080
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
   qanary-com3:
     image: qb-sina:2.0.1
@@ -43,6 +51,8 @@ services:
       - porque-net
     ports:
       - 8882:8080 
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
   qanary-com4:
     image: qanary_component-ned-falcon:2.2.0
@@ -50,6 +60,8 @@ services:
       - porque-net
     ports:
       - 8883:10011
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
   
   qanary-com5:
     image: qanary_component-ned-falcon-enriched:2.2.0
@@ -57,6 +69,8 @@ services:
       - porque-net
     ports:
       - 8884:10012
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
   qanary-com6:
     image: qanary_component-rel-relationlinker3:2.0.0
@@ -64,6 +78,8 @@ services:
       - porque-net
     ports:
       - 8885:8080
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
   qanary-com7:
     image: qanary_component-qb-sqg:2.0.1
@@ -71,21 +87,29 @@ services:
       - porque-net
     ports:
       - 8887:8080
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
   falcon:
     image: falcon
     ports:
       - 5001:8281
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
   falconenriched:
     image: falconenriched
     ports:
       - 5002:8281
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
   
   sqg:
     image: sqg:1.0.0
     ports:
       - 5055:5010
+    extra_hosts:
+      - "porque.cs.upb.de:host-gateway"
 
 networks:
   porque-net:

@@ -19,8 +19,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: run pull command
-        run: pwd
         
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -32,11 +30,11 @@ jobs:
       - name: run pull command
         run: git pull
         
-      - name: deploy new code 
+      - name: deploy new code
         run: bash ./dockerfiles/deploy.sh
         
       - name: clear old docker images
-        run: docker system prune -a -f
+        run: docker images --quiet --filter=dangling=true | xargs --no-run-if-empty docker rmi
         
 
 

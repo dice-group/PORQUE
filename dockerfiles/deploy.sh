@@ -42,4 +42,6 @@ cd ..
 docker build -t porque-nginx -f dockerfiles/nginx/Dockerfile .
 docker build -t porque-backend -f dockerfiles/backend/Dockerfile .
 
-docker stack deploy --compose-file ./dockerfiles/docker-compose.yml porque-stack
+cd dockerfiles/
+# docker stack deploy --compose-file ./dockerfiles/docker-compose.yml porque-stack
+docker-compose up -d
