@@ -1,16 +1,14 @@
-version: "3"
-
 services:
 
   nginx:
-    image: $REGISTRY/porque/nginx:$VERSION
+    image: porque-nginx
     ports:
       - 80:80
     networks:
       - porque-net
 
   porque-backend:
-    image: $REGISTRY/porque/backend-server:$VERSION
+    image: porque-backend
     networks:
       - porque-net
     ports:
