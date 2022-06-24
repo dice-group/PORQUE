@@ -25,5 +25,8 @@ public interface PORQUEConstant {
     
     // Default response
     String DEF_RESPONSE = "{ \"questions\": [{\"question\": [{\"string\": \"%s\",\"language\": \"%s\"}],\"query\": {},\"answers\": []}]}";
+    
+    String QUE_JSON = "{'question': [{'language': '%s', 'string': '%s'}], 'query': {'sparql': '%s'}, 'answers': []}";
+    String ANS_JSON = "{'head': {'vars': []}, 'results': {'bindings': []}}";
 
 }
