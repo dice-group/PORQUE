@@ -7,7 +7,17 @@ git submodule update --init
 git submodule update --recursive --remote
 
 # Starting Stardog server
-bash $STARDOG_HOME/stardog-admin server start
+# bash $STARDOG_HOME/stardog-admin server start
+
+echo "Checking availability of Stardog server."
+# Check if Stardog server is up
+STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" http://admin:admin@localhost:5820/qanary)
+if [ "$STATUSCODE" -ne 200 ]; then echo "Stardog server unreachable."; exit -1; fi
+
+echo "Checking availability of ES instance."
+# Check if ES server is up
+STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" http://porque.cs.upb.de:9400)
+if [ "$STATUSCODE" -ne 200 ]; then echo "ElasticSearch server unreachable."; exit -1; fi
 
 cd dockerfiles/
 
