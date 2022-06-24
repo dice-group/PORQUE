@@ -86,6 +86,15 @@ public class QanaryQA implements QASystems {
                 }
                 
             }
+            else {
+            	JSONObject question = new JSONObject();
+                question.put(
+                        "question", new JSONArray().put(
+                                new JSONObject().put(
+                                        "string", query).put(
+                                        "language", "en")));
+                jsonArray.put(question);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -117,9 +126,9 @@ public class QanaryQA implements QASystems {
         		continue;
         	}
             ArrayList<String> results = new ArrayList<>();
+            
             QueryExecution qExe = QueryExecutionFactory.sparqlService(sparqlEndpoint, query, defaultGraph);
             try {
-
                 String queryToken = query.substring(query.indexOf("?") + 1, Math.min(query.indexOf(".", query.indexOf("?")), query.indexOf(" ", query.indexOf("?"))));
                 ResultSet resultset = qExe.execSelect();
                 while (resultset.hasNext()) {
