@@ -65,6 +65,7 @@ public class Controller {
     	logger.info(countId+"\tReceived request for the question: "+ query);
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
+            logger.debug("Query translated to English: "+query);
         }
         QAResponse qaResponse = new QAResponse();
         qaResponse.setResponseJSON(new Tebaqa().getQALDresponse(query, PORQUEConstant.ENGLISH_LANG_CODE));
@@ -89,6 +90,7 @@ public class Controller {
     	logger.info(countId+"\tReceived request for the question: "+ query);
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
+            logger.debug("Query translated to English: "+query);
         }
         QAResponse qaResponse = new QAResponse();
         qaResponse.setResponseJSON(new QAnswer().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE));
@@ -150,6 +152,7 @@ public class Controller {
     	
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
+            logger.debug("Query translated to English: "+query);
         }
         QAResponse qaResponse = new QAResponse();
         qaResponse.setResponseJSON(new QanaryQA().getQALDresponse(query,PORQUEConstant.ENGLISH_LANG_CODE,pipelineCode));
@@ -170,6 +173,7 @@ public class Controller {
     	logger.info(countId+"\tReceived request for the question: "+ query);
         if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
             query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
+            logger.debug("Query translated to English: "+query);
         }
         QAResponse qaResponse = new QAResponse();
         qaResponse.setResponseJSON(new Tebaqa().getQALDresponse(query, PORQUEConstant.ENGLISH_LANG_CODE));
