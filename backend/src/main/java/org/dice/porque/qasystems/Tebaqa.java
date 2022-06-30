@@ -1,9 +1,5 @@
 package org.dice.porque.qasystems;
 
-import org.dice.porque.constants.PORQUEConstant;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,15 +8,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Class to connect to TeBaQa system.
  *
  * @author Sourabh Poddar
  */
 public class Tebaqa implements QASystems {
-    private static final String requestURL = PORQUEConstant.TEBAQA_URL;
+    private String requestURL;
 
-    public String getQALDresponse(String query, String lang) {
+    public Tebaqa(String requestURL) {
+		super();
+		this.requestURL = requestURL;
+	}
+
+	public String getQALDresponse(String query, String lang) {
         JSONObject tebaqaResponse = (JSONObject) getAnswer(query,lang);
         String type = null;
         String sparqlQuery;

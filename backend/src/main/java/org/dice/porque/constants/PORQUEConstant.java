@@ -12,7 +12,8 @@ public interface PORQUEConstant {
 
     //API URL
     String LIBRE_TRANSLATE_URL = "http://porque.cs.upb.de:5310/translate";
-    String TEBAQA_URL = "http://tebaqa.cs.upb.de:8080/qa-porque";
+    String TEBAQA_NORM_URL = "http://porque.cs.upb.de:15080/qa-porque";
+    String TEBAQA_ENR_URL = "http://porque.cs.upb.de:16080/qa-porque";
     String QANSWER_URL = "http://qanswer-core1.univ-st-etienne.fr/api/gerbil";
     String QANARY_URL = "http://porque.cs.upb.de:8888/startquestionansweringwithtextquestion";
     String QANARY_SPARQL_ENDPOINT = "http://admin:admin@porque.cs.upb.de:5820/qanary/query";

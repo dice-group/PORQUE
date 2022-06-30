@@ -1,10 +1,5 @@
 package org.dice.porque;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import javax.validation.Valid;
 
 import org.dice.porque.constants.PORQUEConstant;
@@ -21,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -54,11 +48,28 @@ public class Controller {
      *
      * @param qaRequest request body
      */
-    @PostMapping(path = "/QA-tebaqa", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
+    @PostMapping(path = "/qa-tebaqa-norm", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
-    public String postmethod(@Valid @ModelAttribute QARequest qaRequest) {
-        String query = qaRequest.getQuery();
+    public String postTebaqaNorm(@Valid @ModelAttribute QARequest qaRequest) {
+    	return callTebaqa(qaRequest, PORQUEConstant.TEBAQA_NORM_URL);
+    }
+    
+    /**
+     * Method to handle post request for enriched tebaqa QA system
+     *
+     * @param qaRequest request body
+     */
+    @PostMapping(path = "/qa-tebaqa-enr", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
+    public String postTebaqaEnr(@Valid @ModelAttribute QARequest qaRequest) {
+    	return callTebaqa(qaRequest, PORQUEConstant.TEBAQA_ENR_URL);
+    }
+    
+    private String callTebaqa(QARequest qaRequest, String tebaqaUri) {
+    	String resp = null;
+    	String query = qaRequest.getQuery();
         // Fetch counter value
     	int countId = requestCounter();
     	// Log incoming query
@@ -68,10 +79,12 @@ public class Controller {
             logger.debug("Query translated to English: "+query);
         }
         QAResponse qaResponse = new QAResponse();
-        qaResponse.setResponseJSON(new Tebaqa().getQALDresponse(query, PORQUEConstant.ENGLISH_LANG_CODE));
+        Tebaqa tebInstance = new Tebaqa(tebaqaUri);
+        qaResponse.setResponseJSON(tebInstance.getQALDresponse(query, PORQUEConstant.ENGLISH_LANG_CODE));
         // Log outgoing response
         logger.info(countId+"\tSending response: "+qaResponse.getResponseJSON());
-        return qaResponse.getResponseJSON();
+        resp = qaResponse.getResponseJSON();
+    	return resp;
     }
 
     /**
@@ -159,41 +172,6 @@ public class Controller {
         // Log outgoing response
         logger.info(countId+"\tSending response: "+qaResponse.getResponseJSON());
         return qaResponse.getResponseJSON();
-    }
-
-    @PostMapping(path = "/QA", consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE})
-    public String postmethodJSON(@Valid @RequestBody QARequest qaRequest) {
-        String query = qaRequest.getQuery();
-        // Fetch counter value
-    	int countId = requestCounter();
-    	// Log incoming query
-    	logger.info(countId+"\tReceived request for the question: "+ query);
-        if (!qaRequest.getLang().equals(PORQUEConstant.ENGLISH_LANG_CODE)) {
-            query = libreTranslate.tranlate(query, qaRequest.getLang(), PORQUEConstant.ENGLISH_LANG_CODE);
-            logger.debug("Query translated to English: "+query);
-        }
-        QAResponse qaResponse = new QAResponse();
-        qaResponse.setResponseJSON(new Tebaqa().getQALDresponse(query, PORQUEConstant.ENGLISH_LANG_CODE));
-        // Log outgoing response
-        logger.info(countId+"\tSending response: "+qaResponse.getResponseJSON());
-        return qaResponse.getResponseJSON();
-    }
-
-    private void writeLogtoFile(StringBuffer stringBuffer) {
-        File file = new File(getClass().getClassLoader().getResource("").getPath() + "log.txt");
-        try {
-            if (!file.exists())
-                file.createNewFile();
-            FileWriter fw = new FileWriter(file, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(stringBuffer.toString());
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     
     private static int requestCounter() {
