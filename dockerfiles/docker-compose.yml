@@ -5,7 +5,7 @@ services:
   nginx:
     image: porque-nginx
     ports:
-      - 80:80
+      - 85:80
     networks:
       - porque-net
     extra_hosts:
