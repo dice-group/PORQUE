@@ -1,0 +1,50 @@
+<!doctype html>
+<title>PORQUE QA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+{% if not answer %}
+<form method="POST">
+  <textarea name="query">Welche sind den buchstabe des bundesministerium dass fur ökologischen weggefallen stehen?</textarea>
+  <label>Service
+    <select name="service">
+      <option value="neamt">neamt</option>
+      <option value="poolparty">poolparty</option>
+    </select>
+  </label>
+  <fieldset id="neamt_options">
+    <legend>Options for neamt</legend>
+    <label>Components
+      <input name="neamt_components" value="spacy_ner, mag_el, libre_mt"/>
+    </label>
+  </fieldset>
+  <fieldset id="poolparty_options">
+    <legend>Options for poolparty</legend>
+    <label>Project
+      <select name="poolparty_project_id">{% for p in poolparty_projects %}<option value="{{ p }}">{{ p }}</option>{% endfor %}</select>
+    </label>
+    <label>Language
+      <select name="poolparty_lang"><option>en</option><option>de</option></select>
+    </label>
+    <label>Number of documents
+      <input name="poolparty_numdocs" type="number" value="5"/>
+    </label>
+  </fieldset>
+  <input type="submit"/>
+</form>
+{% endif %}
+{% if answer %}
+<p>{{answer}}</p>
+<details>
+  <pre>
+{{json}}</pre>
+</details>
+{% endif %}
+<script>
+  const service = document.querySelector('[name=service]');
+  function serviceChange() {
+      document.querySelectorAll('fieldset').forEach(el => el.style.display = 'none');
+      document.getElementById(service.value + '_options').style.display = '';
+  }
+  serviceChange();
+  service.addEventListener('change', serviceChange);
+</script>
