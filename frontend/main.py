@@ -36,9 +36,9 @@ def neamt_service(form):
 
     query = data['translated_text']
     # call the qa system
-    qa_sys = form['qa_system_id']
+    qa_sys = lfqa_systems[form['qa_system_id']]
 
-    qa_data = qa_sys['request_formatter'](query ,qa_sys['uri'])
+    qa_data = qa_sys['request_formatter'](query, qa_sys['uri'])
 
     data.update(qa_data)
 
