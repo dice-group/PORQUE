@@ -71,7 +71,7 @@ def qa():
         'lfqa_systems': lfqa_systems,
     }
     if 'query' in flask.request.form:
-        data = services[flask.request.form['service']](flask.request.form)
+        data.update(services[flask.request.form['service']](flask.request.form))
     if 'json' in data:
         data['json'] = json.dumps(data['json'], indent=4, sort_keys=True)
     return flask.render_template('qa.html', **data)
