@@ -8,14 +8,12 @@ poolparty_api = 'https://demos-02.poolparty.biz/'
 
 poolparty_projects = requests.get(poolparty_api + 'projects/').json()['projects']
 
-app = flask.Flask(__name__)
-
 def qsw_request_formatter(question, uri):
     data = requests.get(uri, params={'question': question}).json()
     return {
         'answer': data['answer'],
         'json': data,
-    }
+}
 
 lfqa_systems  = {
     'gAnswer': { 'uri': 'http://141.57.8.18:40199/gAnswer/answer', 'request_formatter': qsw_request_formatter},
@@ -23,6 +21,10 @@ lfqa_systems  = {
     'deeppavlov2.0': {'uri': 'http://141.57.8.18:40199/deeppavlov2023/answer', 'request_formatter': qsw_request_formatter}
     #'tebaqa': {}
 }
+
+app = flask.Flask(__name__)
+
+
 
 def neamt_service(form):
     query = form['query']
