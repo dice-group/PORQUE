@@ -50,6 +50,6 @@
       document.querySelectorAll('fieldset').forEach(el => el.style.display = 'none');
       document.getElementById(service.value + '_options').style.display = '';
   }
-  serviceChange();
+  addEventListener('load', () => setTimeout(serviceChange));
   service.addEventListener('change', serviceChange);
 </script>
