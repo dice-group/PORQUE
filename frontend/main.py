@@ -68,6 +68,7 @@ services = {
 def qa():
     data = {
         'poolparty_projects': poolparty_projects,
+        'lfqa_systems': lfqa_systems,
     }
     if 'query' in flask.request.form:
         data = services[flask.request.form['service']](flask.request.form)
