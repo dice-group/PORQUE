@@ -18,8 +18,8 @@ def qsw_request_formatter(question, uri):
 lfqa_systems = {
     'gAnswer': {'uri': 'http://141.57.8.18:40199/gAnswer/answer', 'request_formatter': qsw_request_formatter},
     'deeppavlov': {'uri': 'http://141.57.8.18:40199/deeppavlov2023/answer', 'request_formatter': qsw_request_formatter},
-    'deeppavlov2.0': {'uri': 'http://141.57.8.18:40199/deeppavlov2023/answer', 'request_formatter': qsw_request_formatter}
-    #'tebaqa': {}
+    'deeppavlov2.0': {'uri': 'http://141.57.8.18:40199/deeppavlov2023/answer', 'request_formatter': qsw_request_formatter},
+    'tebaqa': {'uri': 'http://141.57.8.18:40199/tebaqa/answer', 'request_formatter': qsw_request_formatter}
 }
 
 app = flask.Flask(__name__)
