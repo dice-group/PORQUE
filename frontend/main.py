@@ -1,13 +1,30 @@
 #!/usr/bin/env python3
 import flask
+import functools
 import json
 import requests
+import time
 import traceback
 
 neamt_api = 'http://porque.cs.upb.de/porque-neamt/custom-pipeline'
 poolparty_api = 'https://demos-02.poolparty.biz/'
 
-poolparty_projects = requests.get(poolparty_api + 'projects/').json()['projects']
+app = flask.Flask(__name__)
+
+def ttl_hash():
+    return round(time.time() / 60)
+
+@functools.lru_cache()
+def fetch_poolparty_projects(ttl_hash=None):
+    try:
+        app.logger.info('Fetching a list of poolparty projects...')
+        return requests.get(poolparty_api + 'projects/').json()['projects']
+    except Exception:
+        app.logger.exception('Failed to fetch a list of poolparty projects')
+        return []
+
+def get_poolparty_projects():
+    return fetch_poolparty_projects(ttl_hash=ttl_hash())
 
 def qsw_request_formatter(question, uri):
     data = requests.get(uri, params={'question': question}).json()
@@ -22,8 +39,6 @@ lfqa_systems = {
     'deeppavlov': {'uri': 'http://141.57.8.18:40199/deeppavlov2023/answer', 'request_formatter': qsw_request_formatter},
     'deeppavlov2.0': {'uri': 'http://141.57.8.18:40199/deeppavlov2023/answer', 'request_formatter': qsw_request_formatter}
 }
-
-app = flask.Flask(__name__)
 
 def translate_message(lang, message):
     retval = ''
@@ -73,7 +88,7 @@ def neamt_service(form):
     return retval
 
 def poolparty_service(form):
-    assert form['poolparty_project_id'] in poolparty_projects
+    assert 'poolparty_project_id' in form and form['poolparty_project_id'] in get_poolparty_projects()
     data = requests.get(poolparty_api + 'projects/' + form['poolparty_project_id'] + '/ask', params={
         'question': form['query'],
         'lang': form['poolparty_lang'],
@@ -92,7 +107,7 @@ services = {
 @app.route('/', methods=['GET', 'POST'])
 def qa():
     data = {
-        'poolparty_projects': poolparty_projects,
+        'poolparty_projects': get_poolparty_projects(),
         'lfqa_systems': lfqa_systems,
     }
     if 'query' in flask.request.form:
