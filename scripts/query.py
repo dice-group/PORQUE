@@ -14,16 +14,19 @@ graph_de.parse('mappingbased-objects_lang=de.ttl', format='ttl')
 graph_fr = Graph()
 graph_fr.parse('mappingbased-objects_lang=fr.ttl', format='ttl')
 
-subjects = []
-predicates = []
-objects = []
-for s, p, o in graph_en:
-    if s not in subjects:
+
+def graph_to_list(graph):
+    subjects = []
+    predicates = []
+    objects = []
+    for s, p, o in graph:
         subjects.append(s)
-    if p not in predicates:
         predicates.append(p)
-    if o not in objects:
         objects.append(o)
+    
+    return(list(set(subjects)), list(set(predicates)), list(set(objects)))
+
+subjects, predicates, objects = graph_to_list(graph_en)
 
 with open("Subjects/subjects_en.txt", "w") as file:
     file.write(str(subjects))
@@ -34,16 +37,7 @@ with open("Predicates/predicates_en.txt", "w") as file:
 with open("Objects/objects_en.txt", "w") as file:
     file.write(str(objects))
 
-subjects = []
-predicates = []
-objects = []
-for s, p, o in graph_es:
-    if s not in subjects:
-        subjects.append(s)
-    if p not in predicates:
-        predicates.append(p)
-    if o not in objects:
-        objects.append(o)
+subjects, predicates, objects = graph_to_list(graph_es)
 
 with open("Subjects/subjects_es.txt", "w") as file:
     file.write(str(subjects))
@@ -55,16 +49,7 @@ with open("Objects/objects_es.txt", "w") as file:
     file.write(str(objects))
 
 
-subjects = []
-predicates = []
-objects = []
-for s, p, o in graph_de:
-    if s not in subjects:
-        subjects.append(s)
-    if p not in predicates:
-        predicates.append(p)
-    if o not in objects:
-        objects.append(o)
+subjects, predicates, objects = graph_to_list(graph_de)
 
 with open("Subjects/subjects_de.txt", "w") as file:
     file.write(str(subjects))
@@ -76,16 +61,7 @@ with open("Objects/objects_de.txt", "w") as file:
     file.write(str(objects))
 
 
-subjects = []
-predicates = []
-objects = []
-for s, p, o in graph_fr:
-    if s not in subjects:
-        subjects.append(s)
-    if p not in predicates:
-        predicates.append(p)
-    if o not in objects:
-        objects.append(o)
+subjects, predicates, objects = graph_to_list(graph_fr)
 
 with open("Subjects/subjects_fr.txt", "w") as file:
     file.write(str(subjects))
