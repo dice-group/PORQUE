@@ -1,5 +1,7 @@
 #!/bin/bash
 declare -a lang_arr=("de" "fr" "es")
+dir=`pwd`
+echo $dir
 if [[ ! -d enrichment-en ]]
 then
  mkdir enrichment-en
@@ -9,16 +11,19 @@ then
 fi
 files=`ls en/`
 echo "Softlinking all files in english."
+cd enrichment-en/en-files
 for file in $files
 do
 #  echo "${file%%.*}"
- ln -s "en/${file}" "enrichment-en/en-files/${file%%.*}.nt"
+ ln -s "${dir}/en/${file}" "${file%%.*}.nt"
 done
 
 for lang in "${lang_arr[@]}"
 do
  echo "Softlinking necessary files from ${lang}"
- ln -s "enrichment-files/${lang}/fully_lnkd" "enrichment-en/fully-linked/${lang}_fl.nt"
- ln -s "enrichment-files/${lang}/lnkd_ltrls" "enrichment-en/linked-literals/${lang}_ll.nt"
+ cd ../fully-linked
+ ln -s "${dir}/enrichment-files/${lang}/fully_lnkd.nt" "${lang}_fl.nt"
+ cd ../linked-literals
+ ln -s "${dir}/enrichment-files/${lang}/lnkd_ltrls.nt" "${lang}_ll.nt"
 done
 echo "Softlinking files finished."
