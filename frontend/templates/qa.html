@@ -1,31 +1,70 @@
 <!doctype html>
 <title>PORQUE QA</title>
 <link rel="stylesheet" href="static/water.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 {% if not answer %}
 <a href="https://www.porque-project.eu"><img src="static/porque.svg" style="max-height: 6em;" alt="PORQUE"/></a>
 <form method="POST">
   <p>
-    <label for="query">Question</label>
+    <label for="query">Question / Input text</label>
     <textarea name="query" id="query">Wo ist der Geburtsort von Angela Merkel?</textarea>
   </p>
   <p>
     <label for="service">Service</label>
     <select name="service" id="service">
-      <option value="neamt">LFQA</option>
-      <option value="poolparty">poolparty</option>
+      <option value="lfqa">LFQA (Multilingual QA - UPB UC)</option>
+      <option value="poolparty">poolparty (Multilingual Hybrid-QA - SWC UC)</option>
+      <option value="neamt">NEAMT (Machine Translation)</option>
+      <option value="mst5">MST5 (Multilingual QA - UPB UC)</option>
     </select>
   </p>
-  <fieldset id="neamt_options">
+  <fieldset id="lfqa_options">
     <legend>Options for LFQA</legend>
-    <label>NEAMT Components
-      <input name="neamt_components" value="babelscape_ner, mgenre_el, opus_mt"/>
+    <label>Input Language
+      <select name="lfqa_lang_id" style="min-width: 113px;">{% for k in porque_langs.keys() %}<option value="{{ k }}">{{ porque_langs[k] }}</option>{% endfor %}</select>
+    </label>
+    <label>NEAMT Components 
+      <a href="https://github.com/dice-group/LFQA/tree/main/naive-eamt#na%C3%AFve-eamt-na%C3%AFve-entity-aware-machine-translation-framework" target="_blank" title="List of available components">
+        <i class="fa fa-question-circle"></i>
+      </a>
+      <input name="lfqa_neamt_components" value="babelscape_ner, mgenre_el, opus_mt"/>
     </label>
     <label>QA system
-      <select name="qa_system_id">{% for k in lfqa_systems.keys() %}<option value="{{ k }}">{{ k }}</option>{% endfor %}</select>
+      <select name="lfqa_qa_system_id">{% for k in lfqa_systems.keys() %}<option value="{{ k }}">{{ k }}</option>{% endfor %}</select>
+    </label>
+    <br>
+    <small class="red-small-text">Note: Response from MST5 will be slow since its deployed on hardware with only 4 cpu cores.</small>
+  </fieldset>
+
+  <fieldset id="neamt_options">
+    <legend>Options for NEAMT</legend>
+    <label>Input Language
+      <select name="neamt_lang_id" style="min-width: 113px;">{% for k in porque_langs.keys() %}<option value="{{ k }}">{{ porque_langs[k] }}</option>{% endfor %}</select>
+    </label>
+    <label>NEAMT Components
+      <a href="https://github.com/dice-group/LFQA/tree/main/naive-eamt#na%C3%AFve-eamt-na%C3%AFve-entity-aware-machine-translation-framework" target="_blank" title="List of available components">
+        <i class="fa fa-question-circle"></i>
+      </a>
+      <input name="neamt_neamt_components" value="babelscape_ner, mgenre_el, opus_mt"/>
     </label>
   </fieldset>
+
+  <fieldset id="mst5_options">
+    
+    <legend>Options for MST5</legend>
+    
+    <label>Input Language
+      <select name="mst5_lang_id" style="min-width: 113px;">{% for k in porque_langs.keys() %}<option value="{{ k }}">{{ porque_langs[k] }}</option>{% endfor %}</select>
+    </label>
+    <label>SPARQL Endpoint
+      <select name="mst5_sparql_endpoint_id">{% for k in sparql_endpoints.keys() %}<option value="{{ k }}">{{ sparql_endpoints[k]['label'] }}</option>{% endfor %}</select>
+    </label>
+    <br>
+    <small class="red-small-text">Note: Response from MST5 will be slow since its deployed on hardware with only 4 cpu cores.</small>
+  </fieldset>
+
   <fieldset id="poolparty_options">
     <legend>Options for poolparty</legend>
     <label>Project

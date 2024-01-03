@@ -1478,7 +1478,7 @@ details {
   padding: 10px 10px 0;
   margin: 1em 0;
   border-radius: 6px;
-  overflow: hidden;
+  overflow-x: scroll;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1686,4 +1686,14 @@ body > footer {
     color: #00f;
     text-decoration: underline;
   }
+}
+
+.red-small-text {
+  color: red;
+  font-size: smaller;
+}
+
+.fa-question-circle {
+  color: #0076d1; /* Change color */
+  font-size: 15px; /* Change size */
 }
