@@ -1,7 +1,6 @@
 <!doctype html>
 <title>PORQUE QA</title>
 <link rel="stylesheet" href="static/water.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 {% if not answer %}
@@ -44,8 +43,8 @@
       <select name="neamt_lang_id" style="min-width: 113px;">{% for k in porque_langs.keys() %}<option value="{{ k }}">{{ porque_langs[k] }}</option>{% endfor %}</select>
     </label>
     <label>NEAMT Components
-      <a href="https://github.com/dice-group/LFQA/tree/main/naive-eamt#na%C3%AFve-eamt-na%C3%AFve-entity-aware-machine-translation-framework" target="_blank" title="List of available components">
-        <i class="fa fa-question-circle"></i>
+      <a href="https://github.com/dice-group/LFQA/tree/main/naive-eamt#na%C3%AFve-eamt-na%C3%AFve-entity-aware-machine-translation-framework" target="_blank" title="List of available components" >
+        <svg width="17" height="17" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m0 0h24v24h-24z" fill="#0076d1" opacity="0" transform="matrix(-1 0 0 -1 24 24)"/><path d="m12 2a10 10 0 1 0 10 10 10 10 0 0 0 -10-10zm0 16a1 1 0 1 1 1-1 1 1 0 0 1 -1 1zm1-5.16v1.16a1 1 0 0 1 -2 0v-2a1 1 0 0 1 1-1 1.5 1.5 0 1 0 -1.5-1.5 1 1 0 0 1 -2 0 3.5 3.5 0 1 1 4.5 3.34z" fill="#0076d1"/></svg>
       </a>
       <input name="neamt_neamt_components" value="babelscape_ner, mgenre_el, opus_mt"/>
     </label>
