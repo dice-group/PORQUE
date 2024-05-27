@@ -1,6 +1,6 @@
 # PORQUE Frontend
 
-Deployment: [porque.cs.upb.de](porque.cs.upb.de)
+Deployment: <http://porque.cs.upb.de/>
 
 LFQA: <https://github.com/dice-group/LFQA/>
 
