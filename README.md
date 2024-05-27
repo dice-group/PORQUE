@@ -10,6 +10,6 @@ NEAMT: <https://github.com/dice-group/LFQA/tree/main/naive-eamt#na%C3%AFve-eamt-
 
 QA Systems API for tebaqa, gAnswer, deeppavlov: <http://141.57.8.18:40199/docs>
 
-KG Enrichment: <https://github.com/dice-group/PORQUE/tree/kg-enrichment>
+KG Enrichment: <https://github.com/dice-group/PORQUE/tree/kg-fusion>
 
 Pool Party: <https://www.poolparty.biz/>
